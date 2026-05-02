@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Ann Gaikovich
+      changes:
+        - createTable:
+            tableName: doctors
+            remarks: "Профили врачей"
+            columns:
+              - column: { name: id, type: BIGINT, autoIncrement: true, constraints: { primaryKey: true, nullable: false } }
+              - column: { name: last_name, type: VARCHAR(50), constraints: { nullable: false } }
+              - column: { name: first_name, type: VARCHAR(50), constraints: { nullable: false } }
+              - column: { name: middle_name, type: VARCHAR(50) }
+              - column: { name: specialization_name, type: VARCHAR(100), constraints: { nullable: false } }
+              - column: { name: department_id, type: BIGINT, constraints: { nullable: false } }
+              - column: { name: phone, type: VARCHAR(20) }
+              - column: { name: email, type: VARCHAR(100) }
+              - column: { name: work_experience, type: INT }
+              - column: { name: created_at, type: TIMESTAMP, defaultValueComputed: CURRENT_TIMESTAMP, constraints: { nullable: false } }
+              - column: { name: updated_at, type: TIMESTAMP, defaultValueComputed: CURRENT_TIMESTAMP, constraints: { nullable: false } }
+        - addDefaultValue:
+            tableName: doctors
+            columnName: updated_at
+            defaultValueComputed: CURRENT_TIMESTAMP
+        - addUniqueConstraint:
+            tableName: doctors
+            constraintName: uk_doctor_email
+            columnNames: email
+  - changeSet:
+      id: 2
+      author: Ann Gaikovich
+      changes:
+        - addColumn:
+            tableName: doctors
+            columns:
+              - column:
+                  name: auth_user_id
+                  type: BIGINT
+                  remarks: "ID пользователя из Auth Service"
