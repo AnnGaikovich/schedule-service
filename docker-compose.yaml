@@ -1,0 +1,38 @@
+services:
+
+  schedule-db:
+    image: postgres:17
+    container_name: schedule-db
+    environment:
+      POSTGRES_DB: schedule_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5434:5432"
+    volumes:
+      - schedule-db-data:/var/lib/postgresql/data
+    networks:
+      - hms-network
+
+  schedule-service:
+    build: .
+    container_name: schedule-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - schedule-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://schedule-db:5432/schedule_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123456
+      APP_AUTH_SERVICE_URL: http://auth-service:8080
+      APP_JWT_PUBLIC_KEY: classpath:keys/public.pem
+    networks:
+      - hms-network
+
+networks:
+  hms-network:
+    driver: bridge
+
+volumes:
+  schedule-db-data:

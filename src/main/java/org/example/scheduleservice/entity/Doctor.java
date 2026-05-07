@@ -38,7 +38,7 @@ public class Doctor {
     private String specializationName;
 
     @Column(name = "department_id", nullable = false)
-    private Long departmentId;  // ссылка на отделение в Hospitalization Service
+    private Long departmentId;
 
     private String phone;
     private String email;

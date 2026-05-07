@@ -15,11 +15,44 @@ spring:
       ddl-auto: validate
     show-sql: true
   session:
-    store-type: none   # ????????? ??????
+    store-type: none
 
 app:
   auth-service:
     url: http://localhost:8080
+
+  optimization:
+    min-slots-per-week: 3
+    max-added-slots: 2
+    work-days:
+      - MONDAY
+      - TUESDAY
+      - WEDNESDAY
+      - THURSDAY
+      - FRIDAY
+      - SATURDAY
+      - SUNDAY
+    shifts:
+      - start: "08:00:00"
+        duration-hours: 4
+      - start: "12:00:00"
+        duration-hours: 4
+      - start: "16:00:00"
+        duration-hours: 4
+      - start: "20:00:00"
+        duration-hours: 4
+      - start: "00:00:00"
+        duration-hours: 4
+      - start: "08:00:00"
+        duration-hours: 8
+      - start: "16:00:00"
+        duration-hours: 8
+      - start: "00:00:00"
+        duration-hours: 8
+      - start: "08:00:00"
+        duration-hours: 12
+      - start: "20:00:00"
+        duration-hours: 12
 
 logging:
   level:

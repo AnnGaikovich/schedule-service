@@ -11,6 +11,8 @@ import org.example.scheduleservice.exception.DoctorNotFoundException;
 import org.example.scheduleservice.repository.DoctorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ public class DoctorService {
 
     @Transactional
     public DoctorResponseDTO createDoctor(DoctorCreateRequestDTO request) {
-        // 1. Создаём врача (без authUserId)
+
         Doctor doctor = Doctor.builder()
                 .lastName(request.getLastName())
                 .firstName(request.getFirstName())
@@ -34,7 +36,6 @@ public class DoctorService {
                 .build();
         Doctor saved = doctorRepository.save(doctor);
 
-        // 2. Вызываем Auth Service для создания пользователя
         try {
             AuthUserResponseDTO authUser = authServiceClient.createUser(
                     request.getUsername(),
@@ -45,7 +46,7 @@ public class DoctorService {
             Doctor updated = doctorRepository.save(saved);
             return toResponse(updated);
         } catch (Exception e) {
-            // Откатываем создание врача
+
             doctorRepository.delete(saved);
             throw new RuntimeException("Failed to create user in Auth Service: " + e.getMessage());
         }
@@ -55,6 +56,12 @@ public class DoctorService {
         Doctor doctor = doctorRepository.findById(id)
                 .orElseThrow(() -> new DoctorNotFoundException("Doctor not found with id: " + id));
         return toResponse(doctor);
+    }
+
+    public List<DoctorResponseDTO> getAllDoctors() {
+        return doctorRepository.findAll().stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 
     @Transactional

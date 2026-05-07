@@ -47,4 +47,16 @@ public class GlobalExceptionHandler {
                 .build();
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(NothingToOptimizeException.class)
+    public ResponseEntity<ErrorResponseDTO> handleNothingToOptimize(NothingToOptimizeException ex, WebRequest request) {
+        ErrorResponseDTO error = ErrorResponseDTO.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.NOT_FOUND.value()) // или 204 No Content, но 404 чаще
+                .error("Nothing to Optimize")
+                .message(ex.getMessage())
+                .path(request.getDescription(false).replace("uri=", ""))
+                .build();
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
 }

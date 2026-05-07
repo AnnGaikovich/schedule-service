@@ -16,4 +16,10 @@ public interface DoctorScheduleRepository extends JpaRepository<DoctorSchedule, 
     void deleteByIdAndDoctorId(Long id, Long doctorId);
 
     boolean existsByIdAndDoctorId(Long scheduleId, Long doctorId);
+
+    long countByDoctorIdAndWorkDateBetween(Long doctorId, LocalDate start, LocalDate end);
+    boolean existsByDoctorIdAndWorkDate(Long doctorId, LocalDate workDate);
+
+    long countByDoctorId(Long doctorId);
+
 }
